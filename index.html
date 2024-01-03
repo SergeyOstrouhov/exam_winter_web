@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SmartFit</title>
+    <title>GrandTour Moscow</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -13,12 +14,116 @@
 
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Grandtour Москва</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#section1">О нас</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#section2">Заказать тур</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#section3">Связаться</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
     <main>
-        <div class="fs-3">sdfsdfs</div>
+        <!-- №
+        № ключ API  79ccbf2d-deac-458b-b7af-af4d234c846e
+        № -->
+        <section id="section1" class="mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="fs-3">Добро пожаловать в "ГрандТур Москва"</p>
+                        Мы – ваш путеводитель в мир захватывающих открытий и удивительных историй столицы России!
+                        Мы создали эту компанию с любовью к Москве и стремлением поделиться ее богатством и красотой с
+                        вами.
+                        "ГрандТур Москва" – это не просто экскурсии, а уникальные путеводные приключения, приуроченные к
+                        культурным и историческим достопримечательностям.
+                        Наши профессиональные гиды – настоящие эксперты, которые поделятся с вами тайнами Красной
+                        Площади,
+                        величественностью Кремля и уникальным характером каждого уголка этого города.
+                        Мы стремимся сделать ваше путешествие незабываемым и комфортным. Наша команда заботится о каждой
+                        детали, чтобы вы могли наслаждаться Москвой без лишних хлопот.
+                        Независимо от того, являетесь ли вы туристом, приезжающим в Москву впервые, или местным жителем,
+                        наши экскурсии позволят вам открыть город с новой, захватывающей стороны.
+                        Присоединяйтесь к "ГрандТур Москва" и дайте нам возможность сделать ваше знакомство с Москвой
+                        по-настоящему грандиозным!
+
+                    </div>
+                    <div class="col-md-6">
+                        <img src="./images/logo.jpg" alt="фото Москвы" width="100%">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="section2" class="mt-5 bg-light">
+            <div class="container py-3">
+                <p>Наши маршруты</p>
+                <div class="search-form">
+
+                    <input type="text" class="search-field" id="searchInput">
+
+                    <button class="search-btn">Найти</button>
+                </div>
+                <div class="routes p-0">
+                    <table class="table_routes" id="table_routes">
+                        <thead>
+                            <tr>
+                                <th scope="col">Название</th>
+                                <th scope="col">Описание</th>
+                                <th scope="col">Достопримечательности</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="pagination">
+                <!-- <button class="btn first-page-btn" data-page="1">Первая страница</button>
+                    <div class="pages-btn">
+                        <button class="btn active" data-page="1">1</button>
+                        <button class="btn" data-page="2">2</button>
+                        <button class="btn" data-page="3">3</button>
+                    </div>
+                    <button class="btn last-page-btn">Последняя страница</button> -->
+            </div>
+            </div>
+        </section>
+
+
+
     </main>
+    <footer class="bg-dark text-light text-center py-3">
+        <p>&copy; 2023 GrandTour Moscow. Все права защищены.</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+        <script src="script.js"></script>
 </body>
+
 </html>
