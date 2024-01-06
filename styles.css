@@ -5,3 +5,15 @@ nav {
 .nav-link, .navbar-brand {
     color: #4E4035;
 }
+@media only screen and (max-width: 900px) {
+    table, th, td {
+        display: block;
+    }
+
+    th, td {
+       
+        border: none;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+}

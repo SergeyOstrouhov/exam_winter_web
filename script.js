@@ -2,90 +2,64 @@ let url_routes = new URL('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/
 let api_key = "79ccbf2d-deac-458b-b7af-af4d234c846e";
 let url_orders = new URL('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/orders');
 
-// function setPaginationInfo(info) {
-//     document.querySelector('.total-count').innerHTML = info.total_count;
-//     let start = info.total_count && (info.current_page - 1) * info.per_page + 1;
-//     document.querySelector('.current-interval-start').innerHTML = start;
-//     let end = Math.min(info.total_count, start + info.per_page - 1);
-//     document.querySelector('.current-interval-end').innerHTML = end;
-// };
+let routes = [];
+let guids = {};
+let route_id;
 
-// function createPageBtn(page, classes = []) {
-//     let btn = document.createElement('button');
-//     classes.push('btn');
-//     for (cls of classes) {
-//         btn.classList.add(cls);
-//     }
-//     btn.dataset.page = page;
-//     btn.innerHTML = page;
-//     return btn;
-// };
 
-// function renderPaginationElement(info) {
-//     let btn;
-//     let paginationContainer = document.querySelector('.pagination');
-//     paginationContainer.innerHTML = '';
+function showGuids(guid) {
+    let table = document.getElementById('table_routes');
+    body = table.getElementsByTagName('tbody')[0];
+    let newRow = table.insertRow(table.rows.length);
+    
+    // Добавление ячеек
+    let cell1 = newRow.insertCell(0);
+    let cell2 = newRow.insertCell(1);
+    let cell3 = newRow.insertCell(2);
+    let cell4 = newRow.insertCell(3);
 
-//     btn = createPageBtn(1, ['first-page-btn']);
-//     btn.innerHTML = 'Первая страница';
-//     if (info.current_page == 1) {
-//         btn.style.visibility = 'hidden';
-//     }
-//     paginationContainer.append(btn);
+    // Задание содержимого ячеек
+    cell1.innerHTML = route['name'];
+    cell2.innerHTML = route['description'];
+    cell3.innerHTML = route['mainObject'];
+    let selectButton = document.createElement("button");
+    selectButton.textContent = "Выбрать";
+    // selectButton.addEventListener("click", function () {
+    //     selectGuid(this);
+    // });
+    cell4.appendChild(selectButton);
+};
 
-//     let buttonsContainer = document.createElement('div');
-//     buttonsContainer.classList.add('pages-btns');
-//     paginationContainer.append(buttonsContainer);
+async function addGuids(id) {
+    let cur_url = url_routes;
+    path = url_routes.pathname + "/" + id + '/guids';
+    cur_url.pathname = path;
+    cur_url.searchParams.append('api_key', api_key);
+    const response = await fetch(cur_url);
+    let json = await response.json();
+    json.forEach(guid => {
+        
+        console.log(guid);
+    });
+    
+};
 
-//     let start = Math.max(info.current_page - 2, 1);
-//     let end = Math.min(info.current_page + 2, info.total_pages);
-//     for (let i = start; i <= end; i++) {
-//         btn = createPageBtn(i, i == info.current_page ? ['active'] : []);
-//         buttonsContainer.append(btn);
-//     }
+function selectRow(button) {
+    // Получаем родительскую строку кнопки
+    let row = button.parentNode.parentNode;
+    row = row.cells[0];
+    row = row.innerText;
 
-//     btn = createPageBtn(info.total_pages, ['last-page-btn']);
-//     btn.innerHTML = 'Последняя страница';
-//     if (info.current_page == info.total_pages) {
-//         btn.style.visibility = 'hidden';
-//     }
-//     paginationContainer.append(btn);
-// };
-
-// function downloadData(page = 1) {
-
-//     let list_of_routes = document.querySelector('.table_routes');
-//     let url = new URL();
-//     let perPage = document.querySelector('.per-page-btn').value;
-//     url.searchParams.append('page', page);
-//     url.searchParams.append('per-page', perPage);
-//     let searchText = document.querySelector('.search-field').value;
-//     if (searchText !== "") url.searchParams.append('q', searchText);
-//     let xhr = new XMLHttpRequest();
-//     xhr.open('GET', url);
-//     xhr.responseType = 'json';
-//     xhr.onload = function () {
-//         renderRecords(this.response.records);
-//         setPaginationInfo(this.response['_pagination']);
-//         renderPaginationElement(this.response['_pagination']);
-//     };
-//     xhr.send();
-// };
-
-// function searchByName() {
-//     let url = new URL('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes');
-//     let searchText = document.querySelector('.search-field').value;
-//     if (searchText !== "") url.searchParams.append('q', searchText);
-//     let xhr = new XMLHttpRequest();
-//     xhr.open('GET', url);
-//     xhr.responseType = 'json';
-//     xhr.onload = function () {
-//         renderRecords(this.response.records);
-//         setPaginationInfo(this.response['_pagination']);
-//         renderPaginationElement(this.response['_pagination']);
-//     };
-//     xhr.send();
-// };
+    // Добавьте здесь код для выполнения действий при выборе строки
+    routes.forEach(route => {
+        if (route['name'] == row) {
+            console.log(route['id']);
+            route_id = route['id'];
+        }
+    });
+    addGuids(route_id);
+    
+}
 
 function addRoute(route) {
     let table = document.getElementById('table_routes');
@@ -96,30 +70,43 @@ function addRoute(route) {
     let cell1 = newRow.insertCell(0);
     let cell2 = newRow.insertCell(1);
     let cell3 = newRow.insertCell(2);
+    let cell4 = newRow.insertCell(3);
 
     // Задание содержимого ячеек
     cell1.innerHTML = route['name'];
     cell2.innerHTML = route['description'];
     cell3.innerHTML = route['mainObject'];
+    let selectButton = document.createElement("button");
+    selectButton.textContent = "Выбрать";
+    selectButton.addEventListener("click", function () {
+        selectRow(this);
+    });
+    cell4.appendChild(selectButton);
 };
 
-async function getListOfRoutes() {
+async function getListOfRoutes(page = 1) {
     let cur_url = url_routes;
     cur_url.searchParams.append('api_key', api_key);
     const response = await fetch(cur_url);
     let json = await response.json();
-    const routes = json;
-    routes.forEach(route => {
-        console.log(route);
-        addRoute(route);
-
-    });
-
+    // json.forEach(route => {
+    //     routes.append(route);
+    //     console.log(route);
+    // });
+    routes = json;
+    // console.log(routes[0]);
+    let rec = 3 * (page - 1);
+    for (let i = rec; i < rec + 3; i++) {
+        addRoute(routes[i]);
+    }
+    
 };
 
 
 window.onload = function () {
     //downloadData();
     //document.querySelector('.search-btn').onclick = searchByName;
+    //document.querySelector('.search-btn').onclick = searchByName;
     getListOfRoutes();
+   
 };
