@@ -72,6 +72,13 @@ document.getElementById('close').addEventListener('click', function () {
     resetModal();
 });
 
+function showAlert(msg) {
+    let alertsContainer = document.querySelector('.alerts');
+    let newAlertElement = document.getElementById('alerts-template').cloneNode(true);
+    newAlertElement.querySelector('.msg').innerHTML = msg;
+    newAlertElement.classList.remove('d-none');
+    alertsContainer.append(newAlertElement);
+}
 
 function showGuids(guids) {
     let table = document.getElementById('table_guids');
@@ -316,5 +323,5 @@ window.onload = function () {
     document.querySelector('.search-btn').onclick = function () {
         handleSearch();
     };
-    
+    showAlert("Замёрзли в Москве? - Наши цены согреют вас!");
 };

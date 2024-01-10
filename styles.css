@@ -9,7 +9,24 @@
     color: #4E4035;
     
 }
-
+.for_alerts {
+    background-color: #d6885481;
+}
+.one_back {
+    background-color: #F4A900;
+}
+.two_back {
+    background-color: #ED760E;
+}
+.three_back {
+    background-color: #FFAE42;
+}
+.four_back {
+    background-color: #CC5500;
+}
+.five_back {
+    background-color: #FFA000;
+}
 
 
 @media only screen and (max-width: 768px) {
