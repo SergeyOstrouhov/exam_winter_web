@@ -10,9 +10,11 @@ let modal = new bootstrap.Modal(document.getElementById('myModal'));
 let modalTitle = document.getElementById('modalTitle');
 let modalBody = document.getElementById('modalBody');
 
-let selectedDate = "";
+let selectedDate;
 let selectedTime = "";
 let selectedOption = "";
+
+let pagination_btn = 'px-1 main_color border-0 m-1 rounded';
 
 // Находим элементы на странице
 const dateInput = document.getElementById('date_of');
@@ -22,7 +24,7 @@ const saveButton = document.getElementById('send_data');
 
 // Добавляем обработчики событий для отслеживания изменений в инпутах
 dateInput.addEventListener('input', function () {
-    selectedDate = this.value;
+    selectedDate = new Date(this.value);
 });
 
 timeInput.addEventListener('input', function () {
@@ -39,8 +41,7 @@ saveButton.addEventListener('click', function () {
     console.log("Selected Date:", selectedDate);
     console.log("Selected Time:", selectedTime);
     console.log("Selected Option:", selectedOption);
-    hideModal();
-    resetModal();
+    
     // Ваш код для сохранения изменений
 });
 function hideModal() {
@@ -89,17 +90,22 @@ function showGuids(guids) {
 
         // Задание содержимого ячеек
         cell1.innerHTML = guid['name'];
-        cell2.innerHTML = guid['language'];
-        cell3.innerHTML = guid['workExperience'];
-        cell4.innerHTML = guid['pricePerHour'];
+        cell1.className = 'col-md-2 col-md-px-1';
+        cell2.innerHTML = `Язык: ${guid['language']}`;
+        cell2.className = 'col-md-2 col-md-px-1';
+        cell3.innerHTML = `Опыт работы(в годах): ${guid['workExperience']}`;
+        cell3.className = 'col-md-3 col-md-px-1';
+        cell4.innerHTML = `Цена за час: ${guid['pricePerHour']} рублей`;
+        cell4.className = 'col-md-2 col-md-px-1';
 
         let selectButton = document.createElement("button");
         selectButton.textContent = "Выбрать";
-        selectButton.className = "btn btn-primary select-guid-button"; // Добавляем класс
+        selectButton.className = "btn main_color select-guid-button"; // Добавляем класс
         selectButton.addEventListener("click", function () {
             selectGuid(this);
         });
         cell5.appendChild(selectButton);
+        cell5.className = 'col-md-3 text-center';
     });
 }
 
@@ -152,15 +158,20 @@ function addRoute(route) {
     let cell4 = newRow.insertCell(3);
 
     cell1.innerHTML = route['name'];
+    cell1.className = 'fw-bold px-2 border-bottom text-center';
     cell2.innerHTML = route['description'];
+    cell2.className = 'py-1 border-bottom';
     cell3.innerHTML = route['mainObject'];
-
+    cell3.className = 'py-1 border-bottom';
     let selectButton = document.createElement("button");
     selectButton.textContent = "Выбрать";
+    selectButton.classList.add('main_color');
+    selectButton.classList.add('form-control');
     selectButton.addEventListener("click", function () {
         selectRow(this);
     });
     cell4.appendChild(selectButton);
+    cell4.className = 'border-bottom text-center';
 }
 
 function showRoutes() {
@@ -177,17 +188,13 @@ function showPage(pageNumber) {
     currentPage = pageNumber;
     showRoutes();
     renderPagination();
+    console.log('showPage');
 }
-
 function createPageBtn(pageNumber, text) {
     const pageBtn = document.createElement('button');
     pageBtn.className = 'btn';
     pageBtn.textContent = text;
     pageBtn.dataset.page = pageNumber;
-
-    if (pageNumber === currentPage) {
-        pageBtn.classList.add('active');
-    }
 
     pageBtn.addEventListener('click', function () {
         showPage(parseInt(this.dataset.page));
@@ -195,73 +202,36 @@ function createPageBtn(pageNumber, text) {
 
     return pageBtn;
 }
-
-// Функция для отображения пагинации
 function renderPagination() {
     const totalPages = Math.ceil(routes.length / recordsPerPage);
     const paginationContainer = document.querySelector('.pagination');
+    if (!paginationContainer) {
+        console.error('Pagination container not found.');
+        return;
+    }
+
     paginationContainer.innerHTML = '';
 
     if (totalPages > 1) { // Показываем пагинацию только при наличии более чем одной страницы
-        const firstPageBtn = document.createElement('button');
-        firstPageBtn.className = 'btn first-page-btn';
-        firstPageBtn.textContent = 'Первая страница';
-        firstPageBtn.addEventListener('click', function () {
-            currentPage = 1;
-            showPage(currentPage);
-            renderPagination();
-        });
-
-        const prevPageBtn = document.createElement('button');
-        prevPageBtn.className = 'btn';
-        prevPageBtn.textContent = 'Предыдущая страница';
-        prevPageBtn.addEventListener('click', function () {
-            currentPage = Math.max(currentPage - 1, 1);
-            showPage(currentPage);
-            renderPagination();
-        });
-
         if (currentPage > 1) {
+            const firstPageBtn = createPageBtn(1, 'Первая страница');
+            const prevPageBtn = createPageBtn(currentPage - 1, 'Предыдущая страница');
+            firstPageBtn.className = pagination_btn;
+            prevPageBtn.className = pagination_btn;
             paginationContainer.appendChild(firstPageBtn);
             paginationContainer.appendChild(prevPageBtn);
         }
 
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.className = 'btn';
-            pageBtn.textContent = i;
-            pageBtn.dataset.page = i;
-            if (i === currentPage) {
-                pageBtn.classList.add('active');
-            }
-            pageBtn.addEventListener('click', function () {
-                currentPage = parseInt(this.dataset.page);
-                showPage(currentPage);
-                renderPagination();
-            });
-            paginationContainer.appendChild(pageBtn);
-        }
-
-        const nextPageBtn = document.createElement('button');
-        nextPageBtn.className = 'btn';
-        nextPageBtn.textContent = 'Следующая страница';
-        nextPageBtn.addEventListener('click', function () {
-            currentPage = Math.min(currentPage + 1, totalPages);
-            showPage(currentPage);
-            renderPagination();
-        });
-
-        const lastPageBtn = document.createElement('button');
-        lastPageBtn.className = 'btn last-page-btn';
-        lastPageBtn.textContent = 'Последняя страница';
-        lastPageBtn.dataset.page = totalPages;
-        lastPageBtn.addEventListener('click', function () {
-            currentPage = totalPages;
-            showPage(currentPage);
-            renderPagination();
-        });
+        const currentPageBtn = createPageBtn(currentPage, currentPage.toString());
+        currentPageBtn.className = pagination_btn;
+        currentPageBtn.className = pagination_btn;
+        paginationContainer.appendChild(currentPageBtn);
 
         if (currentPage < totalPages) {
+            const nextPageBtn = createPageBtn(currentPage + 1, 'Следующая страница');
+            const lastPageBtn = createPageBtn(totalPages, 'Последняя страница');
+            nextPageBtn.className = pagination_btn;
+            lastPageBtn.className = pagination_btn;
             paginationContainer.appendChild(nextPageBtn);
             paginationContainer.appendChild(lastPageBtn);
         }
@@ -297,6 +267,7 @@ async function populateAttractionsOptions() {
         const option = document.createElement('option');
         option.value = attraction;
         option.textContent = attraction;
+        
         selectObj.appendChild(option);
     });
 }
@@ -337,6 +308,7 @@ async function getListOfRoutes() {
         option.text = object;
         selectObj.add(option);
     });
+    renderPagination();
 }
 
 window.onload = function () {
@@ -344,4 +316,5 @@ window.onload = function () {
     document.querySelector('.search-btn').onclick = function () {
         handleSearch();
     };
+    
 };

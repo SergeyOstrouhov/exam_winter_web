@@ -1,11 +1,18 @@
-nav {
+.main_color {
     background-color: #D67F54;
     
 }
-.nav-link, .navbar-brand {
-    color: #4E4035;
+.button_class {
+    background-color: #D67F54 ;
 }
-@media only screen and (max-width: 900px) {
+.nav-link, .navbar-brand, .footer_text{
+    color: #4E4035;
+    
+}
+
+
+
+@media only screen and (max-width: 768px) {
     table, th, td {
         display: block;
     }
@@ -16,4 +23,7 @@ nav {
         padding: 8px;
         margin-bottom: 8px;
     }
-}
+    thead {
+        display: none;
+    }
+} 
