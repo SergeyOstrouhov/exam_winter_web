@@ -97,7 +97,7 @@ function showGuids(guids) {
 
         // Задание содержимого ячеек
         cell1.innerHTML = guid['name'];
-        cell1.className = 'col-md-2 col-md-px-1';
+        cell1.className = 'col-md-2 col-md-px-1 fw-bold';
         cell2.innerHTML = `Язык: ${guid['language']}`;
         cell2.className = 'col-md-2 col-md-px-1';
         cell3.innerHTML = `Опыт работы(в годах): ${guid['workExperience']}`;
