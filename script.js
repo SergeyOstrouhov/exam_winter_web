@@ -288,34 +288,39 @@ function getUniqueObjects(routes) {
 async function getListOfRoutes() {
     let cur_url = url_routes;
     cur_url.searchParams.append('api_key', api_key);
-    const response = await fetch(cur_url);
-    let json = await response.json();
-    routes = json;
-    originalRoutes = json; // Сохраняем оригинальный массив
-    showRoutes();
-
-    // Заполняем опции в select_obj
-    const selectObj = document.getElementById('select_obj');
-    const uniqueObjects = getUniqueObjects(json);
+    try {
+        const response = await fetch(cur_url);
+        let json = await response.json();
+        routes = json;
+        originalRoutes = json; // Сохраняем оригинальный массив
+        showRoutes();
     
-    // Очищаем существующие опции
-    while (selectObj.firstChild) {
-        selectObj.removeChild(selectObj.firstChild);
+        // Заполняем опции в select_obj
+        const selectObj = document.getElementById('select_obj');
+        const uniqueObjects = getUniqueObjects(json);
+        
+        // Очищаем существующие опции
+        while (selectObj.firstChild) {
+            selectObj.removeChild(selectObj.firstChild);
+        }
+    
+        // Добавляем новые опции
+        const defaultOption = document.createElement('option');
+        defaultOption.value = 'Выберите объект';
+        defaultOption.text = 'Выберите объект';
+        selectObj.add(defaultOption);
+    
+        uniqueObjects.forEach(object => {
+            const option = document.createElement('option');
+            option.value = object;
+            option.text = object;
+            selectObj.add(option);
+        });
+        renderPagination();
+    } catch (error) {
+        showAlert('К сожалению, не удалось осуществить вопрос к серверу.');
     }
-
-    // Добавляем новые опции
-    const defaultOption = document.createElement('option');
-    defaultOption.value = 'Выберите объект';
-    defaultOption.text = 'Выберите объект';
-    selectObj.add(defaultOption);
-
-    uniqueObjects.forEach(object => {
-        const option = document.createElement('option');
-        option.value = object;
-        option.text = object;
-        selectObj.add(option);
-    });
-    renderPagination();
+    
 }
 
 window.onload = function () {
