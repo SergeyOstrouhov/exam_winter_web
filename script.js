@@ -145,12 +145,11 @@ function selectRow(button) {
 
 function createPageBtn(pageNumber, text) {
     const pageBtn = document.createElement('button');
-    pageBtn.className = 'btn';
     pageBtn.textContent = text;
     pageBtn.dataset.page = pageNumber;
 
     pageBtn.addEventListener('click', function () {
-        //Я не нзаю как здесь использовать функции ТОЛЬКО после объявления
+        //Я не знаю как здесь использовать функции ТОЛЬКО после объявления
         showPage(parseInt(this.dataset.page));
     });
 
@@ -201,9 +200,7 @@ function renderPagination() {
         console.error('Pagination container not found.');
         return;
     }
-
     paginationContainer.innerHTML = '';
-
     if (totalPages > 1) { 
         if (currentPage > 1) {
             const firstPageBtn = createPageBtn(1, 'Первая страница');
@@ -243,14 +240,12 @@ function showPage(pageNumber) {
 function handleSearch() {
     const name = document.getElementById('searchInput').value.toLowerCase();
     const obj = document.getElementById('select_obj').value.toLowerCase(); 
-
     routes = originalRoutes.filter(route => {
         const nameMatch = route.name.toLowerCase().includes(name);
         let include_obj = route.mainObject.toLowerCase().includes(obj);
         const objMatch = obj === "выберите объект" || include_obj;
         return nameMatch && objMatch;
     });
-
     currentPage = 1;
     showPage(currentPage);
     renderPagination();
