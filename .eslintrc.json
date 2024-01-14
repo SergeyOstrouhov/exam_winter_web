@@ -15,13 +15,14 @@
         "no-multiple-empty-lines": "error",
         "computed-property-spacing": "error",
         "func-call-spacing": "error",
-        // "max-len": [
-        //     "error",
-        //     {
-        //         "code": 80
-        //     }
-        // ],
+        "max-len": [
+            "error",
+            {
+                "code": 80
+            }
+        ],
         "semi": "error",
+        "no-use-before-define": "error",
         "no-array-constructor": "error"
     },
     "parserOptions": {

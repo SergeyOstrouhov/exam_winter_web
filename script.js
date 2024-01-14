@@ -1,11 +1,12 @@
-let url_routes = new URL('http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes');
+let url_routes = new URL(
+    'http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes');
 let api_key = "79ccbf2d-deac-458b-b7af-af4d234c846e";
 
 let routes = [];
 let currentPage = 1;
 const recordsPerPage = 3;
 let originalRoutes = [];
-let attractionsSet = new Set();
+let uniqueObjects = new Set();
 let modal = new bootstrap.Modal(document.getElementById('myModal'));
 let modalTitle = document.getElementById('modalTitle');
 let modalBody = document.getElementById('modalBody');
@@ -16,7 +17,6 @@ let selectedOption = "";
 
 let pagination_btn = 'px-1 main_color border-0 m-1 rounded';
 
-// Находим элементы на странице
 const dateInput = document.getElementById('date_of');
 const timeInput = document.getElementById('time_of');
 const selectInput = document.getElementById('amount_people');
@@ -35,24 +35,18 @@ selectInput.addEventListener('change', function () {
     selectedOption = this.value;
 });
 
-// Добавляем обработчик события для кнопки "Save Changes"
+
 saveButton.addEventListener('click', function () {
-    // Здесь можно использовать значения переменных (selectedDate, selectedTime, selectedOption)
     console.log("Selected Date:", selectedDate);
     console.log("Selected Time:", selectedTime);
     console.log("Selected Option:", selectedOption);
     
-    // Ваш код для сохранения изменений
 });
 function hideModal() {
     modal.hide();
 }
 function openModal(guidName) {
-    // Находим модальное окно по id
     modalTitle.textContent = `Информация о гиде: ${guidName}`;
-    
-
-    // Открываем модальное окно
     modal.show();
 }
 function resetModal() {
@@ -60,7 +54,7 @@ function resetModal() {
     modalBody.innerHTML = '';
 }
 
-// Открываем модальное окно при выборе гида
+
 function selectGuid(button) {
     let row = button.parentNode.parentNode;
     let guidName = row.cells[0].innerText;
@@ -74,7 +68,8 @@ document.getElementById('close').addEventListener('click', function () {
 
 function showAlert(msg) {
     let alertsContainer = document.querySelector('.alerts');
-    let newAlertElement = document.getElementById('alerts-template').cloneNode(true);
+    let newAlertElement = document.getElementById('alerts-template');
+    newAlertElement = newAlertElement.cloneNode(true);
     newAlertElement.querySelector('.msg').innerHTML = msg;
     newAlertElement.classList.remove('d-none');
     alertsContainer.append(newAlertElement);
@@ -88,14 +83,12 @@ function showGuids(guids) {
     guids.forEach(guid => {
         let newRow = body.insertRow(body.rows.length);
 
-        // Добавление ячеек
         let cell1 = newRow.insertCell(0);
         let cell2 = newRow.insertCell(1);
         let cell3 = newRow.insertCell(2);
         let cell4 = newRow.insertCell(3);
         let cell5 = newRow.insertCell(4);
 
-        // Задание содержимого ячеек
         cell1.innerHTML = guid['name'];
         cell1.className = 'col-md-2 col-md-px-1 fw-bold';
         cell2.innerHTML = `Язык: ${guid['language']}`;
@@ -107,7 +100,7 @@ function showGuids(guids) {
 
         let selectButton = document.createElement("button");
         selectButton.textContent = "Выбрать";
-        selectButton.className = "btn main_color select-guid-button"; // Добавляем класс
+        selectButton.className = "btn main_color select-guid-button";
         selectButton.addEventListener("click", function () {
             selectGuid(this);
         });
@@ -136,14 +129,11 @@ async function addGuids(id) {
 
 
 function selectRow(button) {
-    // Получаем родительскую строку кнопки
     let row = button.parentNode.parentNode;
     let routeName = row.cells[0].innerText;
 
-    // Добавляем название маршрута в строку "гиды на маршруте"
-    document.getElementById('selectedRoute').textContent = `Гиды на маршруте "${routeName}"`;
-
-    
+    document.getElementById('selectedRoute').textContent =
+    `Гиды на маршруте "${routeName}"`;
     routes.forEach(route => {
         if (route['name'] == routeName) {
             console.log(route['id']);
@@ -153,6 +143,19 @@ function selectRow(button) {
     addGuids(route_id);
 }
 
+function createPageBtn(pageNumber, text) {
+    const pageBtn = document.createElement('button');
+    pageBtn.className = 'btn';
+    pageBtn.textContent = text;
+    pageBtn.dataset.page = pageNumber;
+
+    pageBtn.addEventListener('click', function () {
+        //Я не нзаю как здесь использовать функции ТОЛЬКО после объявления
+        showPage(parseInt(this.dataset.page));
+    });
+
+    return pageBtn;
+}
 
 function addRoute(route) {
     let table = document.getElementById('table_routes');
@@ -191,24 +194,6 @@ function showRoutes() {
         addRoute(routes[i]);
     }
 }
-function showPage(pageNumber) {
-    currentPage = pageNumber;
-    showRoutes();
-    renderPagination();
-    console.log('showPage');
-}
-function createPageBtn(pageNumber, text) {
-    const pageBtn = document.createElement('button');
-    pageBtn.className = 'btn';
-    pageBtn.textContent = text;
-    pageBtn.dataset.page = pageNumber;
-
-    pageBtn.addEventListener('click', function () {
-        showPage(parseInt(this.dataset.page));
-    });
-
-    return pageBtn;
-}
 function renderPagination() {
     const totalPages = Math.ceil(routes.length / recordsPerPage);
     const paginationContainer = document.querySelector('.pagination');
@@ -219,23 +204,25 @@ function renderPagination() {
 
     paginationContainer.innerHTML = '';
 
-    if (totalPages > 1) { // Показываем пагинацию только при наличии более чем одной страницы
+    if (totalPages > 1) { 
         if (currentPage > 1) {
             const firstPageBtn = createPageBtn(1, 'Первая страница');
-            const prevPageBtn = createPageBtn(currentPage - 1, 'Предыдущая страница');
+            const prevPageBtn = createPageBtn(currentPage - 1,
+                'Предыдущая страница');
             firstPageBtn.className = pagination_btn;
             prevPageBtn.className = pagination_btn;
             paginationContainer.appendChild(firstPageBtn);
             paginationContainer.appendChild(prevPageBtn);
         }
 
-        const currentPageBtn = createPageBtn(currentPage, currentPage.toString());
-        currentPageBtn.className = pagination_btn;
+        const currentPageBtn = createPageBtn(currentPage,
+            currentPage.toString());
         currentPageBtn.className = pagination_btn;
         paginationContainer.appendChild(currentPageBtn);
 
         if (currentPage < totalPages) {
-            const nextPageBtn = createPageBtn(currentPage + 1, 'Следующая страница');
+            const nextPageBtn = createPageBtn(currentPage + 1,
+                'Следующая страница');
             const lastPageBtn = createPageBtn(totalPages, 'Последняя страница');
             nextPageBtn.className = pagination_btn;
             lastPageBtn.className = pagination_btn;
@@ -245,14 +232,22 @@ function renderPagination() {
     }
 }
 
+function showPage(pageNumber) {
+    currentPage = pageNumber;
+    showRoutes();
+    renderPagination();
+    console.log('showPage');
+}
+
 
 function handleSearch() {
     const name = document.getElementById('searchInput').value.toLowerCase();
-    const obj = document.getElementById('select_obj').value.toLowerCase(); // Приводим к нижнему регистру
+    const obj = document.getElementById('select_obj').value.toLowerCase(); 
 
     routes = originalRoutes.filter(route => {
         const nameMatch = route.name.toLowerCase().includes(name);
-        const objMatch = obj === "выберите объект" || route.mainObject.toLowerCase().includes(obj);
+        let include_obj = route.mainObject.toLowerCase().includes(obj);
+        const objMatch = obj === "выберите объект" || include_obj;
         return nameMatch && objMatch;
     });
 
@@ -261,29 +256,19 @@ function handleSearch() {
     renderPagination();
     
 }
-async function populateAttractionsOptions() {
-    const selectObj = document.getElementById('select_obj');
-    selectObj.innerHTML = '<option value="Выберите объект">Выберите объект</option>'; // Очищаем существующие опции
 
-    originalRoutes.forEach(route => {
-        const attractions = route.mainObject.split('-').map(attraction => attraction.trim());
-        attractions.forEach(attraction => attractionsSet.add(attraction));
-    });
+// function getUniqueObjects(routes) {
+//     const allObjects = routes.map(route => route.mainObject);
 
-    attractionsSet.forEach(attraction => {
-        const option = document.createElement('option');
-        option.value = attraction;
-        option.textContent = attraction;
-        
-        selectObj.appendChild(option);
-    });
-}
-
+//     const uniqueObjects = [...new Set(allObjects)];
+//     return uniqueObjects;
+// }
 function getUniqueObjects(routes) {
-    const allObjects = routes.map(route => route.mainObject);
+    const allObjects = routes.flatMap(route => route.mainObject.split('-'));
     const uniqueObjects = [...new Set(allObjects)];
     return uniqueObjects;
 }
+
 
 async function getListOfRoutes() {
     let cur_url = url_routes;
@@ -292,12 +277,12 @@ async function getListOfRoutes() {
         const response = await fetch(cur_url);
         let json = await response.json();
         routes = json;
-        originalRoutes = json; // Сохраняем оригинальный массив
+        originalRoutes = json; 
         showRoutes();
     
         // Заполняем опции в select_obj
         const selectObj = document.getElementById('select_obj');
-        const uniqueObjects = getUniqueObjects(json);
+        uniqueObjects = getUniqueObjects(json);
         
         // Очищаем существующие опции
         while (selectObj.firstChild) {
