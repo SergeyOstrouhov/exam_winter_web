@@ -257,12 +257,6 @@ function handleSearch() {
     
 }
 
-// function getUniqueObjects(routes) {
-//     const allObjects = routes.map(route => route.mainObject);
-
-//     const uniqueObjects = [...new Set(allObjects)];
-//     return uniqueObjects;
-// }
 function getUniqueObjects(routes) {
     const allObjects = routes.flatMap(route => route.mainObject.split('-'));
     const uniqueObjects = [...new Set(allObjects)];
